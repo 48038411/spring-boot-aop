@@ -118,7 +118,7 @@ public class AuthTokenAspect {
 //        }
 
         //取得注解中的role_name的值
-//        String[] roleNames = authToken.role_name();
+        String[] roleNames = authToken.role_name();
         //没有role的值
 //        if (roleNames.length <= 1){
 //            if (id1 != null){
@@ -134,6 +134,14 @@ public class AuthTokenAspect {
             UserRoleVo userRoleVo = userMapper.getRoleIdByUserId(id);
             List<RolePerVo> role = userMapper.selectPerNameByRoleId(userRoleVo.getRoleId());
             return Result.success(role);
+        }
+        String id1 = request.getParameter("id");
+        Map<String, Object> map = userMapper.getUserById(id1);
+        for (String roleName : roleNames) {
+            if (roleName.equals(map.get("role_name"))) {
+                // 身份匹配成功
+                return pjp.proceed();
+            }
         }
         return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
 //        else {

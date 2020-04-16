@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 描述:
@@ -16,6 +17,19 @@ import java.util.List;
  * @create 2020-04-13 20:15
  */
 public interface UserMapper {
+    /**
+     * 根据id查询用户信息
+     * @param userId
+     * @return
+     */
+    @Select("SELECT t1.*, t2.* " +
+            "FROM user_role t3 " +
+            "LEFT JOIN sys_user t1 " +
+            "ON t1.user_id = t3.user_id " +
+            "LEFT JOIN sys_role t2 " +
+            "ON t2.role_id = t3.role_id " +
+            "WHERE t3.user_id=#{userId}")
+    Map<String,Object> getUserById(String userId);
     /**
      * 根据用户名查找用户
      * @param name
